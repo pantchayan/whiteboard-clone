@@ -1,0 +1,109 @@
+* {
+  margin: 0;
+  box-sizing: border-box;
+}
+
+html,
+body {
+  overflow: hidden;
+}
+
+canvas {
+  cursor:crosshair;
+}
+
+.eraser-selected{
+       cursor: url("https://img.icons8.com/ios/452/eraser.png"), auto;
+}
+
+/* url('path-to-image.png') */
+
+.top-bar {
+  display: flex;
+  justify-content: space-between;
+}
+
+.tool-bar {
+  position: fixed;
+  z-index: 2;
+  left: calc(50% - 20%);
+  top: 2rem;
+  display: flex;
+  justify-content: space-evenly;
+  width: 40%;
+  height: 60px;
+  align-items: center;
+  background-color: rgb(243, 242, 242);
+  border-radius: 10px 10px 10px 10px;
+  box-shadow: 0 10px 10px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+.color {
+  height: 30px;
+  width: 30px;
+  border-radius: 10px;
+}
+.color:hover {
+  cursor: pointer;
+  transform: scale(1.25);
+}
+
+.red {
+  background-color: red;
+}
+.blue {
+  background-color: blue;
+}
+.yellow {
+  background-color: yellow;
+}
+.green {
+  background-color: green;
+}
+
+.eraser {
+  height: 30px;
+  width: 30px;
+  border-radius: 10px;
+}
+
+.eraser:hover {
+  cursor: pointer;
+  transform: scale(1.25);
+}
+
+.settings-btn {
+  position: fixed;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 2;
+  left: calc(80%);
+  top: 2.5rem;
+  width: 50px;
+  height: 50px;
+  background-color: rgb(34, 26, 26);
+  border-radius: 10px 10px 10px 10px;
+  box-shadow: 0 10px 10px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+.settings-btn > span {
+  color: white;
+  font-size: 2rem;
+}
+
+.setings {
+  z-index: 3;
+  visibility: collapse;
+}
+
+/* #circularcursor {
+  background-color: transparent;
+  border: 1px solid black;
+  height: 20px;
+  width: 20px;
+  border-radius: 50%;
+  -moz-border-radius: 50%;
+  -webkit-border-radius: 50%;
+  position: absolute;
+  z-index: 1;
+} */
