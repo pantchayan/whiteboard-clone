@@ -15,7 +15,8 @@ let brushColor = "#ff0000";
 // let offsetX = canvasOffset.left;
 // let offsetY = canvasOffset.top;
 
-var points = [];
+let points = [];
+let redoPoints = [];
 let lastX;
 let lastY;
 
@@ -27,6 +28,8 @@ let eraser = document.querySelector(".eraser");
 let colorArr = document.querySelectorAll(".color");
 let toolBar = document.querySelector(".tool-bar");
 let undoBtn = document.querySelector(".undo-btn");
+
+let redoBtn = document.querySelector(".redo-btn");
 
 for (let i = 0; i < colorArr.length; i++) {
   colorArr[i].addEventListener("click", (e) => {
@@ -48,7 +51,7 @@ for (let i = 0; i < colorArr.length; i++) {
 eraser.addEventListener("click", () => {
   board.classList.add("eraser-selected");
   brushSize = 70;
-  // brushColor = "white";
+  brushColor = "#FFFFFF";
 });
 
 let isMouseDown = false;
@@ -65,7 +68,6 @@ board.addEventListener("mousedown", (e) => {
   }
 
   ctx.moveTo(mouseX, mouseY);
-  console.log("Mouse down");
   points.push({
     x: mouseX,
     y: mouseY,
@@ -85,7 +87,6 @@ board.addEventListener("mousemove", (e) => {
   //   y = getYCoordinates(y);
 
   if (isMouseDown) {
-    console.log("Mouse move");
     ctx.lineTo(mouseX, mouseY);
     ctx.stroke();
     lastX = mouseX;
@@ -106,8 +107,6 @@ board.addEventListener("mouseup", (e) => {
   let mouseY = parseInt(e.clientY);
   //   y = getYCoordinates(y);
   isMouseDown = false;
-
-  console.log("Mouse up");
   points.push({
     x: mouseX,
     y: mouseY,
@@ -148,7 +147,14 @@ function redrawAll() {
 }
 
 function undoLast() {
-  points.pop();
+  let pt = points.pop();
+  redoPoints.push(pt);
+  redrawAll();
+}
+
+function redoLast() {
+  let pt = redoPoints.pop();
+  points.push(pt);
   redrawAll();
 }
 
@@ -171,6 +177,29 @@ undoBtn.addEventListener("click", function () {
     undoLast();
   }
 });
+
+redoBtn.addEventListener("click", function () {
+  if (redoPoints.length < 3) {
+    return;
+  }
+  let k = redoPoints.length - 1;
+
+  console.log(redoPoints[k].mode, 1);
+  while (k >= 0 && redoPoints[k].mode != "draw") {
+    redoLast();
+    k--;
+  }
+
+  for (let i = k; i >= 0; i--) {
+    if (redoPoints[i].mode != "draw") {
+      break;
+    }
+    redoLast();
+  }
+});
+
+
+
 
 function getYCoordinates(initialY) {
   let obj = toolBar.getBoundingClientRect();
