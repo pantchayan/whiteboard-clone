@@ -13,7 +13,7 @@ canvas {
 }
 
 .eraser-selected {
-  cursor: auto;
+  cursor: default;
 }
 
 /* url('path-to-image.png') */

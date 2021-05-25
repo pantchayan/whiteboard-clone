@@ -19,6 +19,8 @@ let colorsEncoding = [
   { color: "green", code: "#006400" },
   { color: "blue", code: "#0018f5" },
   { color: "orange", code: "#f53d00" },
+  { color: "white", code: "#ffffff" },
+  { color: "white", code: "#000000" }
 ];
 let brushSize = 5;
 let brushColor = "#ff0000";
@@ -46,7 +48,6 @@ for (let i = 0; i < colorArr.length; i++) {
     for (let i = 0; i < colorsEncoding.length; i++) {
       if (colorsEncoding[i].color == color) {
         brushColor = colorsEncoding[i].code;
-        console.log(brushColor);
         break;
       }
     }
@@ -55,7 +56,7 @@ for (let i = 0; i < colorArr.length; i++) {
 
 // PENS FUNCTIONALITY
 penBtn.addEventListener("click", () => {
-  if (brushColor == "#FFFFFF" || brushColor == "#000000") {
+  if (brushColor == "#ffffff" || brushColor == "#000000") {
     brushColor = "#ff0000";
   }
   ctx.lineCap = "butt";
@@ -63,15 +64,16 @@ penBtn.addEventListener("click", () => {
 });
 
 pencilBtn.addEventListener("click", () => {
-  if (brushColor == "#FFFFFF" || brushColor == "#000000") {
+  if (brushColor == "#ffffff" || brushColor == "#000000") {
     brushColor = "#ff0000";
   }
   ctx.lineCap = "butt";
   brushSize = 5;
 });
 
+
 brushBtn.addEventListener("click", () => {
-  if (brushColor == "#FFFFFF" || brushColor == "#000000") {
+  if (brushColor == "#ffffff" || brushColor == "#000000") {
     brushColor = "#ff0000";
   }
   ctx.lineCap = "round";
@@ -85,22 +87,11 @@ eraser.addEventListener("click", () => {
     brushColor = "#000000";
   }
   else{
-    brushColor = "#FFFFFF";
+    brushColor = "#ffffff";
   }
 });
 
-// DARK MODE TOGGLE
-toggleBtn.addEventListener("click", () => {
-  if (isDark) {
-    board.style.backgroundColor = "#FFFFFF";
-    toolBar.style.backgroundColor = "#F3F2F2";
-    isDark = false;
-  } else {
-    board.style.backgroundColor = "#000000";
-    toolBar.style.backgroundColor = "#5e5e5e";
-    isDark = true;
-  }
-});
+
 
 let isMouseDown = false;
 board.addEventListener("mousedown", (e) => {
@@ -212,7 +203,6 @@ undoBtn.addEventListener("click", function () {
   }
   let k = points.length - 1;
 
-  console.log(points[k].mode, 1);
   while (k >= 0 && points[k].mode != "draw") {
     undoLast();
     k--;
@@ -232,7 +222,6 @@ redoBtn.addEventListener("click", function () {
   }
   let k = redoPoints.length - 1;
 
-  console.log(redoPoints[k].mode, 1);
   while (k >= 0 && redoPoints[k].mode != "draw") {
     redoLast();
     k--;
@@ -243,5 +232,37 @@ redoBtn.addEventListener("click", function () {
       break;
     }
     redoLast();
+  }
+});
+
+
+function redrawEraser(eraserColor) {
+  if (points.length == 0) {
+    return;
+  }
+  let oldColor = eraserColor === "#ffffff" ? "#000000" : "#ffffff";
+  // changing to provided color
+  for(let i=0;i<points.length;i++){
+    if(points[i].color == oldColor){
+      points[i].color = eraserColor;
+    }
+  }
+
+  redrawAll();
+}
+
+
+// DARK MODE TOGGLE
+toggleBtn.addEventListener("click", () => {
+  if (isDark) {
+    board.style.backgroundColor = "#ffffff";
+    toolBar.style.backgroundColor = "#F3F2F2";
+    isDark = false;
+    redrawEraser("#ffffff");
+  } else {
+    board.style.backgroundColor = "#000000";
+    toolBar.style.backgroundColor = "#5e5e5e";
+    isDark = true;
+    redrawEraser("#000000");
   }
 });
