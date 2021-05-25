@@ -1,3 +1,15 @@
+let eraser = document.querySelector(".eraser");
+let colorArr = document.querySelectorAll(".color");
+let toolBar = document.querySelector(".tool-bar");
+let undoBtn = document.querySelector(".undo-btn");
+let redoBtn = document.querySelector(".redo-btn");
+
+let penBtn = document.querySelector(".pen");
+let pencilBtn = document.querySelector(".pencil");
+let brushBtn = document.querySelector(".brush");
+
+let toggleBtn = document.querySelector(".checkbox");
+
 let board = document.getElementById("board");
 board.height = window.innerHeight;
 board.width = window.innerWidth;
@@ -10,11 +22,7 @@ let colorsEncoding = [
 ];
 let brushSize = 5;
 let brushColor = "#ff0000";
-
-// let canvasOffset = board.offset();
-// let offsetX = canvasOffset.left;
-// let offsetY = canvasOffset.top;
-
+let isDark = false;
 let points = [];
 let redoPoints = [];
 let lastX;
@@ -24,22 +32,19 @@ let lastY;
 let ctx = board.getContext("2d");
 // ctx.lineCap = "round";
 ctx.lineJoin = "round";
-let eraser = document.querySelector(".eraser");
-let colorArr = document.querySelectorAll(".color");
-let toolBar = document.querySelector(".tool-bar");
-let undoBtn = document.querySelector(".undo-btn");
 
-let redoBtn = document.querySelector(".redo-btn");
-
+// COLORS FUNCTIONALITY
 for (let i = 0; i < colorArr.length; i++) {
   colorArr[i].addEventListener("click", (e) => {
+    if(brushColor=="#FFFFFF" || brushColor =="#000000"){
+      brushSize = 5;
+    }
     board.classList.remove("eraser-selected");
-    brushSize = 3.5;
 
     let color = e.target.classList[1];
-    
-    for(let i=0;i<colorsEncoding.length;i++){
-      if(colorsEncoding[i].color == color){
+
+    for (let i = 0; i < colorsEncoding.length; i++) {
+      if (colorsEncoding[i].color == color) {
         brushColor = colorsEncoding[i].code;
         console.log(brushColor);
         break;
@@ -48,10 +53,53 @@ for (let i = 0; i < colorArr.length; i++) {
   });
 }
 
+// PENS FUNCTIONALITY
+penBtn.addEventListener("click", () => {
+  if (brushColor == "#FFFFFF" || brushColor == "#000000") {
+    brushColor = "#ff0000";
+  }
+  ctx.lineCap = "butt";
+  brushSize = 10;
+});
+
+pencilBtn.addEventListener("click", () => {
+  if (brushColor == "#FFFFFF" || brushColor == "#000000") {
+    brushColor = "#ff0000";
+  }
+  ctx.lineCap = "butt";
+  brushSize = 5;
+});
+
+brushBtn.addEventListener("click", () => {
+  if (brushColor == "#FFFFFF" || brushColor == "#000000") {
+    brushColor = "#ff0000";
+  }
+  ctx.lineCap = "round";
+  brushSize = 20;
+});
+
 eraser.addEventListener("click", () => {
   board.classList.add("eraser-selected");
   brushSize = 70;
-  brushColor = "#FFFFFF";
+  if(isDark){
+    brushColor = "#000000";
+  }
+  else{
+    brushColor = "#FFFFFF";
+  }
+});
+
+// DARK MODE TOGGLE
+toggleBtn.addEventListener("click", () => {
+  if (isDark) {
+    board.style.backgroundColor = "#FFFFFF";
+    toolBar.style.backgroundColor = "#F3F2F2";
+    isDark = false;
+  } else {
+    board.style.backgroundColor = "#000000";
+    toolBar.style.backgroundColor = "#5e5e5e";
+    isDark = true;
+  }
 });
 
 let isMouseDown = false;
@@ -85,7 +133,7 @@ board.addEventListener("mousemove", (e) => {
   let mouseX = parseInt(e.clientX);
   let mouseY = parseInt(e.clientY);
   //   y = getYCoordinates(y);
-
+  redoPoints = [];
   if (isMouseDown) {
     ctx.lineTo(mouseX, mouseY);
     ctx.stroke();
@@ -197,14 +245,3 @@ redoBtn.addEventListener("click", function () {
     redoLast();
   }
 });
-
-
-
-
-function getYCoordinates(initialY) {
-  let obj = toolBar.getBoundingClientRect();
-  //    let marginTop =  parseInt(document.defaultView.getComputedStyle(colors, '').getPropertyValue('margin-top'))
-  return initialY - obj.height - obj.top;
-}
-
-function getXCoordinates(initialX) {}

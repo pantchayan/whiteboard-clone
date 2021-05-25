@@ -10,15 +10,44 @@
       rel="stylesheet"
     />
     <link
+      rel="stylesheet"
+      href="path/to/font-awesome/css/font-awesome.min.css"
+    />
+    <link
       rel="shortcut icon"
       href="https://app.whiteboard.microsoft.com/resources/favicon.ico"
     />
-    <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="Style/button.css">
+    <link rel="stylesheet" href="Style/style.css" />
   </head>
   <body>
     <!-- <div id="circularcursor"></div> -->
     <div class="top-bar">
       <div class="tool-bar">
+        <div class="pencil">
+          <img
+            src="./Assets/pencil-svg.svg"
+            alt="Eraser"
+            height="30px"
+            width="50px"
+          />
+        </div>
+        <div class="pen">
+          <img
+            src="./Assets/pen-svg.svg"
+            alt="Eraser"
+            height="30px"
+            width="50px"
+          />
+        </div>
+        <div class="brush">
+          <img
+            src="./Assets/paint-brush.svg"
+            alt="Eraser"
+            height="30px"
+            width="50px"
+          />
+        </div>
         <div class="color red"></div>
         <div class="color green"></div>
         <div class="color blue"></div>
@@ -40,7 +69,17 @@
           </div>
         </div>
       </div>
+      <input type="checkbox" id="toggle-mode-cb" />
 
+      <div class="toggle-button-cover">
+        <div class="button-cover">
+          <div class="button r" id="button-1">
+            <input type="checkbox" class="checkbox" />
+            <div class="knobs"></div>
+            <div class="layer"></div>
+          </div>
+        </div>
+      </div>
       <div class="settings-btn">
         <span class="material-icons"> settings </span>
       </div>
