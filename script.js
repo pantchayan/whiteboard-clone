@@ -3,6 +3,7 @@ let colorArr = document.querySelectorAll(".color");
 let toolBar = document.querySelector(".tool-bar");
 let undoBtn = document.querySelector(".undo-btn");
 let redoBtn = document.querySelector(".redo-btn");
+let clearBtn = document.querySelector(".clear-btn");
 
 let penBtn = document.querySelector(".pen");
 let pencilBtn = document.querySelector(".pencil");
@@ -25,10 +26,12 @@ let colorsEncoding = [
 let brushSize = 5;
 let brushColor = "#ff0000";
 let isDark = false;
-let points = [];
+
 let redoPoints = [];
 let lastX;
 let lastY;
+
+whiteboardDB[0] = points;
 
 // 2d
 let ctx = board.getContext("2d");
@@ -91,6 +94,13 @@ eraser.addEventListener("click", () => {
   }
 });
 
+clearBtn.addEventListener("click", ()=>{
+  ctx.clearRect(0, 0, board.width, board.height);
+  points=[];
+  whiteboardDB[0] = [];
+  // console.log(whiteboardDB);
+  myStorage.setItem("WhiteboardDB", JSON.stringify(whiteboardDB));
+});
 
 
 let isMouseDown = false;
@@ -153,6 +163,8 @@ board.addEventListener("mouseup", (e) => {
     color: brushColor,
     mode: "end",
   });
+  
+  myStorage.setItem("WhiteboardDB", JSON.stringify(whiteboardDB));
 });
 
 function redrawAll() {
@@ -214,6 +226,8 @@ undoBtn.addEventListener("click", function () {
     }
     undoLast();
   }
+
+  myStorage.setItem("WhiteboardDB", JSON.stringify(whiteboardDB));
 });
 
 redoBtn.addEventListener("click", function () {
@@ -233,6 +247,8 @@ redoBtn.addEventListener("click", function () {
     }
     redoLast();
   }
+
+  myStorage.setItem("WhiteboardDB", JSON.stringify(whiteboardDB));
 });
 
 
@@ -247,7 +263,7 @@ function redrawEraser(eraserColor) {
       points[i].color = eraserColor;
     }
   }
-
+  myStorage.setItem("WhiteboardDB", JSON.stringify(whiteboardDB));
   redrawAll();
 }
 
@@ -266,3 +282,12 @@ toggleBtn.addEventListener("click", () => {
     redrawEraser("#000000");
   }
 });
+
+
+
+redrawAll();
+
+// to deal with back up eraser values
+for(let i=0;i<4;i++){
+  toggleBtn.click();
+}

@@ -12,9 +12,16 @@ canvas {
   cursor: crosshair;
 }
 
+
 .eraser-selected {
   cursor: default;
 }
+
+
+html{
+  cursor: url("../Assets/circle.png");
+}
+
 
 /* url('path-to-image.png') */
 
@@ -26,11 +33,11 @@ canvas {
 .tool-bar {
   position: fixed;
   z-index: 2;
-  left: calc(50% - 20%);
+  left: calc(50% - 23%);
   top: 2rem;
   display: flex;
   justify-content: space-evenly;
-  width: 40%;
+  width: 45%;
   height: 60px;
   align-items: center;
   background-color: rgb(243, 242, 242);
@@ -38,7 +45,7 @@ canvas {
   box-shadow: 0 10px 10px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 }
 
-.pencil, .brush, .pen, .eraser{
+.pencil, .brush, .pen, .eraser, .clear-btn{
   height: 30px;
   width: 20px;
   transform: scale(1.2);
@@ -46,7 +53,8 @@ canvas {
   color: black;
 }
 
-.pencil:hover, .brush:hover, .pen:hover, .eraser:hover{
+
+.pencil:hover, .brush:hover, .pen:hover, .eraser:hover, .clear-btn:hover{
 transform: scale(1.25);
 cursor: pointer;
 }
@@ -114,7 +122,7 @@ cursor: pointer;
   justify-content: center;
   align-items: center;
   z-index: 2;
-  left: calc(80%);
+  right:3rem;
   top: 2.5rem;
   width: 50px;
   height: 50px;

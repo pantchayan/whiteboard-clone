@@ -13,11 +13,12 @@
       rel="shortcut icon"
       href="https://app.whiteboard.microsoft.com/resources/favicon.ico"
     />
-    <link rel="stylesheet" href="Style/button.css">
+
+    <link rel="stylesheet" href="Style/sidenav.css" />
+    <link rel="stylesheet" href="Style/button.css" />
     <link rel="stylesheet" href="Style/style.css" />
   </head>
   <body>
-    <!-- <div id="circularcursor"></div> -->
     <div class="top-bar">
       <div class="tool-bar">
         <div class="pencil">
@@ -48,6 +49,14 @@
         <div class="color green"></div>
         <div class="color blue"></div>
         <div class="color orange"></div>
+        <div class="undo-redo-btns">
+          <div class="undo-btn">
+            <span class="material-icons md-48"> undo </span>
+          </div>
+          <div class="redo-btn">
+            <span class="material-icons md-48"> redo </span>
+          </div>
+        </div>
         <div class="eraser">
           <img
             src="https://d29fhpw069ctt2.cloudfront.net/icon/image/49319/preview.svg"
@@ -56,13 +65,13 @@
             width="50px"
           />
         </div>
-        <div class="undo-redo-btns">
-          <div class="undo-btn">
-            <span class="material-icons md-48"> undo </span>
-          </div>
-          <div class="redo-btn">
-            <span class="material-icons md-48"> redo </span>
-          </div>
+        <div class="clear-btn">
+          <img
+            src="./Assets/delete-svg.svg"
+            alt="Eraser"
+            height="30px"
+            width="50px"
+          />
         </div>
       </div>
 
@@ -75,15 +84,34 @@
           </div>
         </div>
       </div>
-      <div class="settings-btn">
+      <div class="settings-btn" onclick="openNav()">
         <span class="material-icons"> settings </span>
       </div>
+    </div>
+
+    <div id="mySidenav" class="sidenav">
+      <a href="javascript:void(0)" class="closebtn" onclick="closeNav()"
+        >&times;</a>
+      <a href="#">1st Board</a>
+      <a href="#">1st Board</a>
+      <a href="#">1st Board</a>
+      <a href="#">1st Board</a>
+      <a href="#">1st Board</a>
     </div>
 
     <!-- <div class="settings">Settings</div> -->
 
     <canvas id="board"> </canvas>
+    <script defer>
+      function openNav() {
+        document.getElementById("mySidenav").style.width = "400px";
+      }
 
-    <script src="script.js"></script>
+      function closeNav() {
+        document.getElementById("mySidenav").style.width = "0";
+      }
+    </script>
+    <script src="backup.js" defer></script>
+    <script src="script.js" defer></script>
   </body>
 </html>
