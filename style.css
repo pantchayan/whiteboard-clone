@@ -9,11 +9,11 @@ body {
 }
 
 canvas {
-  cursor:crosshair;
+  cursor: crosshair;
 }
 
-.eraser-selected{
-       cursor: url("https://img.icons8.com/ios/452/eraser.png"), auto;
+.eraser-selected {
+  cursor: auto;
 }
 
 /* url('path-to-image.png') */
@@ -52,13 +52,13 @@ canvas {
   background-color: red;
 }
 .blue {
-  background-color: blue;
+  background-color: #0018f5;
 }
-.yellow {
-  background-color: yellow;
+.orange {
+  background-color: #f53d00;
 }
 .green {
-  background-color: green;
+  background-color: #006400;
 }
 
 .eraser {
@@ -70,6 +70,25 @@ canvas {
 .eraser:hover {
   cursor: pointer;
   transform: scale(1.25);
+}
+
+.undo-redo-btns {
+  display: flex;
+}
+
+.undo-btn,
+.redo-btn {
+  margin-left: 10px;
+  transform: scale(1.25);
+  /* font-size: 24px;
+       font-weight: bolder;
+       font-weight: 900; */
+}
+
+.undo-btn :hover,
+.redo-btn :hover {
+  cursor: pointer;
+  transform: scale(1.30);
 }
 
 .settings-btn {
@@ -86,9 +105,14 @@ canvas {
   border-radius: 10px 10px 10px 10px;
   box-shadow: 0 10px 10px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 }
+
 .settings-btn > span {
   color: white;
   font-size: 2rem;
+}
+
+.settings-btn:hover{
+  cursor: pointer;
 }
 
 .setings {
