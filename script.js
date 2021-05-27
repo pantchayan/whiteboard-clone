@@ -4,7 +4,8 @@ let toolBar = document.querySelector(".tool-bar");
 let undoBtn = document.querySelector(".undo-btn");
 let redoBtn = document.querySelector(".redo-btn");
 let clearBtn = document.querySelector(".clear-btn");
-
+let saveBtn = document.querySelector(".save-btn");
+let downloadBtn = document.querySelector(".download-btn");
 let penBtn = document.querySelector(".pen");
 let pencilBtn = document.querySelector(".pencil");
 let brushBtn = document.querySelector(".brush");
@@ -31,8 +32,9 @@ let redoPoints = [];
 let lastX;
 let lastY;
 
-whiteboardDB[0] = points;
-
+// whiteboardDB[0] = whiteboard;
+// points = whiteboard[0];
+console.log(whiteboard);
 // 2d
 let ctx = board.getContext("2d");
 // ctx.lineCap = "round";
@@ -163,7 +165,7 @@ board.addEventListener("mouseup", (e) => {
     color: brushColor,
     mode: "end",
   });
-  
+  whiteboard[0] = points;
   myStorage.setItem("WhiteboardDB", JSON.stringify(whiteboardDB));
 });
 
@@ -226,7 +228,7 @@ undoBtn.addEventListener("click", function () {
     }
     undoLast();
   }
-
+  whiteboard[0] = points;
   myStorage.setItem("WhiteboardDB", JSON.stringify(whiteboardDB));
 });
 
@@ -247,7 +249,7 @@ redoBtn.addEventListener("click", function () {
     }
     redoLast();
   }
-
+  whiteboard[0] = points;
   myStorage.setItem("WhiteboardDB", JSON.stringify(whiteboardDB));
 });
 
@@ -263,6 +265,8 @@ function redrawEraser(eraserColor) {
       points[i].color = eraserColor;
     }
   }
+
+  whiteboard[0] = points;
   myStorage.setItem("WhiteboardDB", JSON.stringify(whiteboardDB));
   redrawAll();
 }
@@ -283,7 +287,21 @@ toggleBtn.addEventListener("click", () => {
   }
 });
 
+saveBtn.addEventListener("click", ()=>{
+  let imgURL = board.toDataURL();
+  whiteboard[1] = imgURL;
+  myStorage.setItem("WhiteboardDB", JSON.stringify(whiteboardDB));
+})
 
+downloadBtn.addEventListener("click", () => {
+  let imgURL = board.toDataURL();
+  let anchor = document.createElement("a");
+  anchor.href = imgURL;
+  anchor.download = "board.png";
+  anchor.click();
+  anchor.remove();
+  // board.remove();
+});
 
 redrawAll();
 
