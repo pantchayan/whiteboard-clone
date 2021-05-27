@@ -1,5 +1,5 @@
 .sidenav {
-       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   height: 100%;
   width: 0;
   position: fixed;
@@ -16,15 +16,63 @@
        z-index: 9;
 }
 
-
 .sidenav a {
-  padding: 8px 8px 8px 32px;
+  padding-top: 8px;;
   text-decoration: none;
-  font-size: 25px;
+  font-size: 15px;
   color: #818181;
   display: block;
   transition: 0.3s;
 }
+
+
+.new-board{
+  /* padding: 8px 8px 8px 32px; */
+  text-decoration: none;
+  font-size: 25px;
+  color: #cfcfcf;
+  font-weight: 700;
+  display: block;
+  transition: 0.3s;
+}
+
+.board-links{
+  display: flex;
+  justify-content: space-around;
+  flex-wrap: wrap
+}
+
+.board-asset>img{
+  
+  border-radius: 7px;
+}
+.board-asset{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 10px 10px 10px 10px;
+}
+
+.board-asset:hover{
+  transform: scale(1.05);
+}
+
+.new-board{
+  padding: 8px 8px 8px 32px;
+  margin-bottom: 20px;
+}
+
+
+.sidenav div>a {
+  font-weight: normal;
+}
+
+
+.sidenav > div:hover{
+  color: rgb(182, 250, 227);
+  cursor: pointer;
+}
+
 
 .sidenav a:hover {
   color: #f1f1f1;
@@ -37,6 +85,7 @@
   font-size: 50px;
   margin-left: 50px;
 }
+
 
 
 @media screen and (max-height: 450px) {

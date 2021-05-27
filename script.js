@@ -9,8 +9,10 @@ let downloadBtn = document.querySelector(".download-btn");
 let penBtn = document.querySelector(".pen");
 let pencilBtn = document.querySelector(".pencil");
 let brushBtn = document.querySelector(".brush");
-
+let newBoard = document.querySelector(".new-board");
 let toggleBtn = document.querySelector(".checkbox");
+
+let boardAssetArr = document.querySelectorAll(".board-asset");
 
 let board = document.getElementById("board");
 board.height = window.innerHeight;
@@ -22,8 +24,9 @@ let colorsEncoding = [
   { color: "blue", code: "#0018f5" },
   { color: "orange", code: "#f53d00" },
   { color: "white", code: "#ffffff" },
-  { color: "white", code: "#000000" }
+  { color: "white", code: "#000000" },
 ];
+
 let brushSize = 5;
 let brushColor = "#ff0000";
 let isDark = false;
@@ -32,7 +35,7 @@ let redoPoints = [];
 let lastX;
 let lastY;
 
-// whiteboardDB[0] = whiteboard;
+// whiteboardDB[boardID] = whiteboard;
 // points = whiteboard[0];
 console.log(whiteboard);
 // 2d
@@ -43,7 +46,7 @@ ctx.lineJoin = "round";
 // COLORS FUNCTIONALITY
 for (let i = 0; i < colorArr.length; i++) {
   colorArr[i].addEventListener("click", (e) => {
-    if(brushColor=="#FFFFFF" || brushColor =="#000000"){
+    if (brushColor == "#FFFFFF" || brushColor == "#000000") {
       brushSize = 5;
     }
     board.classList.remove("eraser-selected");
@@ -76,7 +79,6 @@ pencilBtn.addEventListener("click", () => {
   brushSize = 5;
 });
 
-
 brushBtn.addEventListener("click", () => {
   if (brushColor == "#ffffff" || brushColor == "#000000") {
     brushColor = "#ff0000";
@@ -88,22 +90,20 @@ brushBtn.addEventListener("click", () => {
 eraser.addEventListener("click", () => {
   board.classList.add("eraser-selected");
   brushSize = 70;
-  if(isDark){
+  if (isDark) {
     brushColor = "#000000";
-  }
-  else{
+  } else {
     brushColor = "#ffffff";
   }
 });
 
-clearBtn.addEventListener("click", ()=>{
+clearBtn.addEventListener("click", () => {
   ctx.clearRect(0, 0, board.width, board.height);
-  points=[];
-  whiteboardDB[0] = [];
+  points = [];
+  whiteboardDB[boardID] = [];
   // console.log(whiteboardDB);
   myStorage.setItem("WhiteboardDB", JSON.stringify(whiteboardDB));
 });
-
 
 let isMouseDown = false;
 board.addEventListener("mousedown", (e) => {
@@ -165,11 +165,17 @@ board.addEventListener("mouseup", (e) => {
     color: brushColor,
     mode: "end",
   });
+
   whiteboard[0] = points;
   myStorage.setItem("WhiteboardDB", JSON.stringify(whiteboardDB));
 });
 
 function redrawAll() {
+  if (!whiteboard[0]) {
+    points = [];
+  } else {
+    points = whiteboard[0];
+  }
   if (points.length == 0) {
     return;
   }
@@ -228,6 +234,7 @@ undoBtn.addEventListener("click", function () {
     }
     undoLast();
   }
+
   whiteboard[0] = points;
   myStorage.setItem("WhiteboardDB", JSON.stringify(whiteboardDB));
 });
@@ -249,10 +256,10 @@ redoBtn.addEventListener("click", function () {
     }
     redoLast();
   }
+
   whiteboard[0] = points;
   myStorage.setItem("WhiteboardDB", JSON.stringify(whiteboardDB));
 });
-
 
 function redrawEraser(eraserColor) {
   if (points.length == 0) {
@@ -260,8 +267,8 @@ function redrawEraser(eraserColor) {
   }
   let oldColor = eraserColor === "#ffffff" ? "#000000" : "#ffffff";
   // changing to provided color
-  for(let i=0;i<points.length;i++){
-    if(points[i].color == oldColor){
+  for (let i = 0; i < points.length; i++) {
+    if (points[i].color == oldColor) {
       points[i].color = eraserColor;
     }
   }
@@ -270,7 +277,6 @@ function redrawEraser(eraserColor) {
   myStorage.setItem("WhiteboardDB", JSON.stringify(whiteboardDB));
   redrawAll();
 }
-
 
 // DARK MODE TOGGLE
 toggleBtn.addEventListener("click", () => {
@@ -287,14 +293,80 @@ toggleBtn.addEventListener("click", () => {
   }
 });
 
-saveBtn.addEventListener("click", ()=>{
-  let imgURL = board.toDataURL();
+function canvasToImage(backgroundColor) {
+  //cache height and width
+  var w = board.width;
+  var h = board.height;
+
+  var data;
+
+  if (backgroundColor) {
+    //get the current ImageData for the canvas.
+    data = ctx.getImageData(0, 0, w, h);
+
+    //store the current globalCompositeOperation
+    var compositeOperation = ctx.globalCompositeOperation;
+
+    //set to draw behind current content
+    ctx.globalCompositeOperation = "destination-over";
+
+    //set background color
+    ctx.fillStyle = backgroundColor;
+
+    //draw background / rect on entire canvas
+    ctx.fillRect(0, 0, w, h);
+  }
+
+  //get the image data from the canvas
+  var imageData = this.board.toDataURL("image/png");
+
+  if (backgroundColor) {
+    //clear the canvas
+    ctx.clearRect(0, 0, w, h);
+
+    //restore it with original / cached ImageData
+    ctx.putImageData(data, 0, 0);
+
+    //reset the globalCompositeOperation to what it was
+    ctx.globalCompositeOperation = compositeOperation;
+  }
+
+  //return the Base64 encoded data url string
+  return imageData;
+}
+
+saveBtn.addEventListener("click", () => {
+  if (isDark) toggleBtn.click();
+  let imgURL = canvasToImage("#ffffff");
+
   whiteboard[1] = imgURL;
+  whiteboard[3] = getDateString();
   myStorage.setItem("WhiteboardDB", JSON.stringify(whiteboardDB));
-})
+
+  saveState++;
+  if (saveState == 1) {
+    let boardLinks = document.querySelector(".board-links");
+    let div = document.createElement("div");
+    div.classList.add("board-asset");
+
+    div.innerHTML = `<img src="${
+      whiteboard[1]
+    }" height="90px" width="150px"></img>
+        <a href="#">${getDateString()}</a>`;
+    div.id = boardID;
+    boardLinks.appendChild(div);
+
+    div.addEventListener("click", (e) => loadNewBoard(e));
+  } else {
+    // refresh image for board asset
+  }
+});
 
 downloadBtn.addEventListener("click", () => {
-  let imgURL = board.toDataURL();
+  // let imgURL = board.toDataURL();
+  saveBtn.click();
+  if (isDark) toggleBtn.click();
+  let imgURL = canvasToImage("#ffffff");
   let anchor = document.createElement("a");
   anchor.href = imgURL;
   anchor.download = "board.png";
@@ -303,9 +375,68 @@ downloadBtn.addEventListener("click", () => {
   // board.remove();
 });
 
+newBoard.addEventListener("click", () => {
+  saveBtn.click();
+
+  boardID = whiteboardDB.length;
+  whiteboardDB.push([]);
+  whiteboard = whiteboardDB[boardID];
+  whiteboard.push([]);
+  whiteboard.push("Assets/board.png");
+  whiteboard.push(boardID);
+  whiteboard.push(getDateString());
+  points = whiteboard[0];
+  ctx.clearRect(0, 0, board.width, board.height);
+
+  // =================================================================================
+
+  let boardLinks = document.querySelector(".board-links");
+  let div = document.createElement("div");
+  div.classList.add("board-asset");
+
+  div.innerHTML = `<img src="${
+    whiteboard[1]
+  }" height="90px" width="150px"></img>
+        <a href="#">${getDateString()}</a>`;
+  div.id = boardID;
+  boardLinks.appendChild(div);
+
+  div.addEventListener("click", (e) => loadNewBoard(e));
+  saveState = 1;
+
+});
+
 redrawAll();
 
 // to deal with back up eraser values
-for(let i=0;i<4;i++){
+for (let i = 0; i < 4; i++) {
   toggleBtn.click();
+}
+
+let loadNewBoard = (e) => {
+  saveBtn.click();
+
+
+  boardID = e.path[1].id;
+  
+  whiteboard = whiteboardDB[boardID];
+  if(!whiteboard) return;
+  console.log(whiteboard);
+  points = whiteboard[0];
+  if (!whiteboard[0]) {
+    ctx.clearRect(0, 0, board.width, board.height);
+
+    points = [];
+    whiteboard.push(points);
+    whiteboard.push("#");
+    whiteboard.push(0);
+  } else if (whiteboard[0].length == 0) {
+    ctx.clearRect(0, 0, board.width, board.height);
+  } else {
+    redrawAll();
+  }
+};
+
+for (let i = 0; i < boardAssetArr.length; i++) {
+  boardAssetArr[i].addEventListener("click", (e) => loadNewBoard(e));
 }
