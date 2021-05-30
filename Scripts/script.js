@@ -13,7 +13,7 @@ let newBoard = document.querySelector(".new-board");
 let toggleBtn = document.querySelector(".checkbox");
 
 let boardAssetArr = document.querySelectorAll(".board-asset");
-
+let viewImgArr = document.querySelectorAll(".board-asset>img");
 let board = document.getElementById("board");
 board.height = window.innerHeight;
 board.width = window.innerWidth;
@@ -99,8 +99,14 @@ eraser.addEventListener("click", () => {
 
 clearBtn.addEventListener("click", () => {
   ctx.clearRect(0, 0, board.width, board.height);
+  let date = whiteboard[3];
   points = [];
-  whiteboardDB[boardID] = [];
+  whiteboard = [];
+  whiteboard.push(points);
+  whiteboard.push("Assets/board.png");
+  whiteboard.push(boardID);
+  whiteboard.push(date);
+  whiteboardDB[boardID] = whiteboard;
   // console.log(whiteboardDB);
   myStorage.setItem("WhiteboardDB", JSON.stringify(whiteboardDB));
 });
@@ -335,6 +341,12 @@ function canvasToImage(backgroundColor) {
   return imageData;
 }
 
+let refreshViews = () => {
+  for (let i = 0; i < boardAssetArr.length; i++) {
+    boardAssetArr[i].childNodes[0].src = whiteboardDB[boardAssetArr[i].id][1];
+  }
+};
+
 saveBtn.addEventListener("click", () => {
   if (isDark) toggleBtn.click();
   let imgURL = canvasToImage("#ffffff");
@@ -360,6 +372,8 @@ saveBtn.addEventListener("click", () => {
   } else {
     // refresh image for board asset
   }
+  boardAssetArr = document.querySelectorAll(".board-asset");
+  refreshViews();
 });
 
 downloadBtn.addEventListener("click", () => {
@@ -404,6 +418,8 @@ newBoard.addEventListener("click", () => {
   div.addEventListener("click", (e) => loadNewBoard(e));
   saveState = 1;
 
+  boardAssetArr = document.querySelectorAll(".board-asset");
+  refreshViews();
 });
 
 redrawAll();
@@ -416,11 +432,10 @@ for (let i = 0; i < 4; i++) {
 let loadNewBoard = (e) => {
   saveBtn.click();
 
-
   boardID = e.path[1].id;
-  
+
   whiteboard = whiteboardDB[boardID];
-  if(!whiteboard) return;
+  if (!whiteboard) return;
   console.log(whiteboard);
   points = whiteboard[0];
   if (!whiteboard[0]) {

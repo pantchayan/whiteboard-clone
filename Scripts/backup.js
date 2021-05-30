@@ -67,6 +67,6 @@ if (myStorage.getItem("WhiteboardDB") != null) {
   whiteboard.push(points);
   whiteboard.push("Assets/board.png");
   whiteboard.push(0);
-  whiteboard.push(getDateString);
+  whiteboard.push(getDateString());
   saveState = 0;
 }
